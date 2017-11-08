@@ -1,0 +1,10 @@
+parse the csv
+fill the objects structure
+raycast every object in objects
+save raycasting color data into pic structure
+output picture structure into ppm file
+
+Files:
+	parse_csv :: takes in a csv scene file and fills an objects structure
+	vec_mathlib :: contains several math functions for doing raycasting
+	raycast :: takes in a filled objects structure and outputs a picture structure
