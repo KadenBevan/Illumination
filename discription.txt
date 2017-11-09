@@ -1,10 +1,15 @@
 parse the csv
-fill the objects structure
-raycast every object in objects
+fill the stObjects structure
+raycast every stObject in stObjects
 save raycasting color data into pic structure
 output picture structure into ppm file
 
 Files:
-	parse_csv :: takes in a csv scene file and fills an objects structure
+	parse_csv :: takes in a csv scene file and fills an stObjects structure
 	vec_mathlib :: contains several math functions for doing raycasting
-	raycast :: takes in a filled objects structure and outputs a picture structure
+	raycast :: takes in a filled stObjects structure and outputs a picture structure
+	
+	
+
+"clamp dot product" diffuse = light_direction*stObject_normal if diffuse > 0
+pixel color = light_color*stObject_normal

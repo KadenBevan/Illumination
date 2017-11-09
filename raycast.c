@@ -7,7 +7,8 @@ static double img_width;
 static double pixels_width;
 static double pixels_height;
 static int object_count;
-static object* scene;
+static int light_count;
+static stObject* scene;
 
 int main(int argc, char* argv[]){
 	// check argument number
@@ -16,10 +17,16 @@ int main(int argc, char* argv[]){
 		return -1;
 	}
 
-   // check input file
-   char* fn_in = argv[3];
+    // check input file
+    char* fn_in = argv[3];
 	if(strstr(fn_in, ".txt") == NULL){
 		printf("The file provided is not .txt, Please see README.md for more details.");
+		return -2;
+	}
+	// check output file
+	char* fn_out = argv[4];
+	if(strstr(fn_out, ".ppm") == NULL){
+		printf("The file provided is not .ppm, Please see README.md for more details.");
 		return -2;
 	}
 	// initialize variables
@@ -28,7 +35,7 @@ int main(int argc, char* argv[]){
 		printf("Error reading objects");
 		return -3;
 	}
-	if(!scene[0].width || !scene[0].width){ // check camera is 0 object
+	if(!scene[0].width || !scene[0].width){ // check camera is 0 stObject
 		printf("Error reading camera");
 		return -4;
 	}
@@ -38,16 +45,17 @@ int main(int argc, char* argv[]){
 	cam_height = scene[0].height;
 	pixels_height = cam_height / img_height;
 	pixels_width = cam_width / img_height;
-	object_count = num_objects(fn_in);
-	cast_rays(object_count);
+	object_count = num_objects();
+	light_count = num_lights();
+	//printf("%f", scene[0].width);
+	cast_rays(object_count, fn_out);
 	free(scene);
 }
 
-int cast_rays(int count){
+int cast_rays(int count, char* file_out){
 	double cx = 0;
 	double cy = 0;
-	char* fn_out = "output.ppm";
-	FILE *fh_out = fopen(fn_out, "wb");
+	FILE *fh_out = fopen(file_out, "wb");
 	if(!fh_out){
 		printf("ERROR");
 		return -1;
@@ -70,9 +78,9 @@ int cast_rays(int count){
 				}
 				if (t >= 0 && t < closest_t) {
 					closest_t = t;
-					color[0] = scene[k].color[0];
-					color[1] = scene[k].color[1];
-					color[2] = scene[k].color[2];
+					color[0] = scene[k].color[0]*255;
+					color[1] = scene[k].color[1]*255;
+					color[2] = scene[k].color[2]*255;
 				}
 			}
 			fprintf(fh_out, "%i %i %i ", (int)color[0], (int)color[1], (int)color[2]);

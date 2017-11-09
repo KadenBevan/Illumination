@@ -1,5 +1,5 @@
 all: raycast.o vec_mathlib.o parse_csv.o
-	gcc raycast.o vec_mathlib.o parse_csv.o -o raycast
+	gcc raycast.o vec_mathlib.o parse_csv.o -o illumination
 
 raycast.o: raycast.c raycast.h
 	gcc -c raycast.c

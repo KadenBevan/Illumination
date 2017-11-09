@@ -7,6 +7,6 @@
 #include "math.h"
 #include "parse_csv.h"
 
-int cast_rays(int count);
+int cast_rays(int count, char* file_out);
 
 #endif
