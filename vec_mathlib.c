@@ -8,16 +8,24 @@ double normalize_vector(double* v) {
 	return len;
 }
 
-static double dot_vector(double* v1, double* v2){
+double dot_vector(double* v1, double* v2){
 	return v1[0]*v2[0] + v1[1]*v2[1] + v1[2]*v2[2];
 }
 
-static double* sub_vector(double* v1, double* v2){
-	static double result[3];
-	result[0] = v1[0] - v2[0];
-	result[1] = v1[1] - v2[1];
-	result[2] = v2[1] - v2[2];
-	return result;
+void scale_vector(double* v, double s, double* out) {
+  out[0] = s * v[0];
+  out[1] = s * v[1];
+  out[2] = s * v[2];
+}
+void add_vector(double* v1, double* v2, double* out) {
+  out[0] = v1[0] + v1[0];
+  out[1] = v1[1] + v1[1];
+  out[2] = v1[2] + v1[2];
+}
+void sub_vector(double* v1, double* v2, double* out) {
+  out[0] = v1[0] - v2[0];
+  out[1] = v1[1] - v2[1];
+  out[2] = v1[2] - v2[2];
 }
 
 double sphere_intersection(double* ro, double* rd, double* center, double radius){
@@ -44,9 +52,41 @@ double sphere_intersection(double* ro, double* rd, double* center, double radius
 double plane_intersection(double* ro, double* rd, double* position, double* normal){
 	double numer;
 	double denom;
-	
-	numer = dot_vector(normal, sub_vector(position, ro));
+	double v[3];
+	sub_vector(position, ro, v);
+	numer = dot_vector(normal, v);
 	denom = dot_vector(normal, rd);
 
 	return numer/denom;
 }
+
+double radial_attin(double dist, double a0, double a1, double a2){
+	if(a0 < 1e-10 && a1 < 1e-10 && a2 < 1e-10){
+		return 1.0;
+	}
+	if(dist == INFINITY){
+		return 1.0;
+	}
+	else{
+		return 1/(pow(dist, 2) + (a1 * dist) + a0);
+	}
+}
+
+double angular_attin(double a0, double theta, double* direction, double* light){
+	double alpha = cos(dot_vector(light, direction));
+	// convert alpha to degrees
+	alpha = alpha * (180.0 / PI);
+	// if theta is 0
+	if(theta < 1e-10){
+		return 1.0;
+	}
+	else if(theta < alpha){
+		return 0.0;
+	}
+	else{
+		return(pow(dot_vector(light, direction), a0));
+	}
+}
+
+
+
